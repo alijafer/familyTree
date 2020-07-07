@@ -62,6 +62,11 @@ class Person(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+    def short(self):
+        return{
+            'person_id': self.person_id,
+            'name': self.name
+        }
     def format(self):
         return {
             'person_id': self.person_id,
@@ -86,6 +91,7 @@ class Relations(db.Model):
         self.person = person
         self.partenr = partenr
         self.relation = relation
+    
     def insert(self):
         db.session.add(self)
         db.session.commit()
