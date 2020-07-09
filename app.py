@@ -7,7 +7,7 @@ from flask_cors import CORS
 from models import setup_db, Person, Relations
 from typing import Final
 from utilies import paginate_person
-
+from auth import AuthError, requires_auth
 
 def create_app():
     # create and configure the app
@@ -24,7 +24,8 @@ def create_app():
     version  : Final = "v1"
 
     @app.route("/"+version+"/person", methods=['GET'])
-    def persons_get_all():
+    @requires_auth('get:person')
+    def persons_get_all(payload):
         person_list = {}
         try:
             person_qurey = Person.query.all()
@@ -43,7 +44,8 @@ def create_app():
 
 
     @app.route("/"+version+"/person", methods=['POST'])
-    def person_insert():
+    @requires_auth('get:person')
+    def person_insert(payload):
         data = request.get_json()
         name = data.get('name', None)
         gender = data.get('gender', None)
@@ -76,7 +78,8 @@ def create_app():
 
 
     @app.route("/"+version+'/partenr', methods=['POST'])
-    def make_partenr():
+    @requires_auth('post:partenr')
+    def make_partenr(payload):
         data = request.get_json()
         person = data.get('person', None)
         partenr = data.get('partenr', None)
@@ -122,7 +125,8 @@ def create_app():
 
 
     @app.route("/"+version+"/partenr/<int:id_partenr>", methods=['GET'])
-    def persons_get_partenr(id_partenr):
+    @requires_auth('get:partenr')
+    def persons_get_partenr(id_partenr, payload):
         print("aa")
         if id_partenr == 0:
             partenr_father_query = Relations.query.filter_by(relation=1).all()
@@ -160,7 +164,8 @@ def create_app():
 
 
     @app.route("/"+version+'/partenr/<int:id>', methods=['DELETE'])
-    def remove_partenr(id):
+    @requires_auth('delete:partenr')
+    def remove_partenr(payload, id):
         if id is None or id == 0:
             abort(404)
         partenr = Relations.query.filter_by(relation_id=id).one_or_none()
@@ -194,7 +199,8 @@ def create_app():
             abort(422)
 
     @app.route("/"+version+'/person/<int:id>', methods=['DELETE'])
-    def person_delete(id):
+    @requires_auth('delete:person')
+    def person_delete(payload, id):
         if id is None or id == 0:
             abort(404)
         person = Person.query.filter_by(person_id=id).one_or_none()
@@ -214,7 +220,8 @@ def create_app():
 
 
     @app.route("/"+version+'/person/<int:id>', methods=['PATCH'])
-    def person_fix_data(id):
+    @requires_auth('patch:person')
+    def person_fix_data(payload, id):
         if id is None or id == 0:
             abort(404)
         person = Person.query.filter_by(person_id=id).one_or_none()
@@ -255,7 +262,8 @@ def create_app():
 
 
     @app.route("/"+version+'/partenr/<int:id>', methods=['PATCH'])
-    def partenr_fix_data(id):
+    @requires_auth('patch:partenr')
+    def partenr_fix_data( payload, id):
         if id is None or id == 0:
             abort(404)
         print(id)
@@ -365,15 +373,15 @@ def create_app():
         }), 500
 
 
-    # @app.errorhandler(AuthError)
-    # def handle_auth_error(exception):
+    @app.errorhandler(AuthError)
+    def handle_auth_error(exception):
         '''
     error handler for AuthError
         error handler is conform to general task above
         '''
-    #    response = jsonify(exception.error)
-    #    response.status_code = exception.status_code
-    #    return response
+        response = jsonify(exception.error)
+        response.status_code = exception.status_code
+        return response
     return app
  
 
