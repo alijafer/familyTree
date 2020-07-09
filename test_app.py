@@ -5,10 +5,12 @@ from flask_sqlalchemy import SQLAlchemy
 from app import create_app
 from models import setup_db, Person, Relations
 from typing import Final
+from auth import AuthError, requires_auth
+
 
 version  : Final = "v1"
-
-
+token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik5aWnZlbTNiMDVxR2hra0t1MUJldiJ9.eyJpc3MiOiJodHRwczovL2FsaWRldi5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWViZmEyMmI4YjIzOWQwYmZlNmRlMGY4IiwiYXVkIjoiZmFtaWx5VHJlZUFwaSIsImlhdCI6MTU5NDI1OTQ2OCwiZXhwIjoxNTk0MjY2NjY4LCJhenAiOiJrTUNyVHJpUDNzYnhINXZQaWR4eUhQQmxIbFFOZUMyQyIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOnBhcnRlbnIiLCJkZWxldGU6cGVyc29uIiwiZ2V0OnBhcnRlbnIiLCJnZXQ6cGVyc29uIiwicGF0Y2g6cGFydGVuciIsInBhdGNoOnBlcnNvbiIsInBvc3Q6cGFydGVuciIsInBvc3Q6cGVyc29uIl19.UfIpT10zjylu4UPbkrnDruYY5tNImAI_k8e7_Th4qkqAxyYN2HW0zqaV-yBU6BYc1hAqBpSPVK8PhdnMIqdmY5S0CWmyZXIDFtMC95QVOTRNtTL7GoEpy2FB6Rn8QHvnI5GyZkjBl3qcmmI5AcIhiklgEsHby1vJqwW9SKS68y6CnYLXfJrlRzoxA484DYZ0KIWjgUyjEmbqRf48VMvORjyiwMqfkhyCnvgCwpY_HYYHZfRI1uo2IP3uqOe5LwJ21jBr1dfJqi0WolFYetEjlcFmDZBEPCt5_0MkZZU80l__okeiUN2xKBG-s1CtNzjhLe56WhBYt2WO4caJkX5AKw"
+headers1 = {'Content-Type': 'application/json', 'Authorization': 'Bearer '+ token}
 class familyTreeTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
     
@@ -69,7 +71,8 @@ class familyTreeTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-
+        #self.token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik5aWnZlbTNiMDVxR2hra0t1MUJldiJ9.eyJpc3MiOiJodHRwczovL2FsaWRldi5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWViZmEyMmI4YjIzOWQwYmZlNmRlMGY4IiwiYXVkIjoiZmFtaWx5VHJlZUFwaSIsImlhdCI6MTU5NDI1MTQzNywiZXhwIjoxNTk0MjU4NjM3LCJhenAiOiJrTUNyVHJpUDNzYnhINXZQaWR4eUhQQmxIbFFOZUMyQyIsInNjb3BlIjoiIn0.CIEmDgl_ZCwfxhsorYDtPjjI8TAAjb14nL-M19Ykao0e-mIYFf7jEoxam9XjzWLBFHEvIpMRldUDOm8si69leB0B1WstbK37WJHzDg5gzEZkSzZC81S313fyPG-ey82SoK7qRj5iZ9rFTQzD0gcXX6hEwOVldKihnV3HpVFGiQ_EdMr2ZTZu9xDQ7zF0D3gHZBmXSZnBp9sTPRSy6xarbp8pAFEqDVgOKZKboqyJaHijYXevtBCOcyftrJUQpbHVy10TPfvgSYIYHykBmTYKV5wNLrgV6QFJjUPuiNeGEB_omLxh98g2kMSIY0kTg4L1kVx59R7Jzz4lr2wHrAHXWw"
+        
     def tearDown(self):
         """Executed after reach test"""
         pass
@@ -82,7 +85,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test GET methods  that send Get reaquset to /example
-        res = self.client().get("/"+version+"/person")
+        res = self.client().get("/"+version+"/person", headers=headers1)
         # featch the GET response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -94,6 +97,20 @@ class familyTreeTestCase(unittest.TestCase):
         # confirm the respones get 3 persons
         self.assertEqual(len(data['persons']), 3)
 
+    def test_get_all_person_without_token(self):
+        
+        '''
+        Test to get all person without token
+        return 'success': False, 
+        :pass
+        '''
+        # code for test GET methods  that send Get reaquset to /example
+        res = self.client().get("/"+version+"/person")
+        # featch the GET response
+        #data = json.loads(res.data)
+        # confirm the status response code is 200 is mean Ok
+        self.assertEqual(res.status_code, 401)
+        #print(data)
 
     def test_get_paginate_persons(self):
         '''
@@ -102,7 +119,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test GET methods  that send Get reaquset to /example
-        res = self.client().get('/'+version+'/person')
+        res = self.client().get('/'+version+'/person', headers=headers1)
         # featch the GET response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -120,7 +137,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test GET methods  that send Get reaquset to /example
-        res = self.client().get('/'+version+'/person?page=10000000')
+        res = self.client().get('/'+version+'/person?page=10000000', headers=headers1)
         # featch the GET response
         data = json.loads(res.data)
         # confirm the status response code is 404 is mean resource not found
@@ -136,12 +153,24 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().post('/'+version+'/person', json=self.new_person1)
+        res = self.client().post('/'+version+'/person', json=self.new_person1, headers=headers1)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
         self.assertEqual(res.status_code, 200)
         self.assertIsNotNone(data['persons'])
+
+    def test_create_new_Person_without_token(self):
+        '''
+        Test insert person with data in db
+        :pass
+        '''
+        # code for test POST methods  that send POST reaquset to /example
+        res = self.client().post('/'+version+'/person', json=self.new_person1)
+        # featch the post response
+        # data = json.loads(res.data)
+        # confirm the status response code is 200 is mean Ok
+        self.assertEqual(res.status_code, 401)
 
     def test_404_if_person_creation_no_data(self):
         '''
@@ -149,7 +178,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().post('/'+version+'/person', json=self.new_person_empty)
+        res = self.client().post('/'+version+'/person', json=self.new_person_empty, headers=headers1)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 422 is mean unprocessable
@@ -164,12 +193,23 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().post('/'+version+'/partenr', json=self.new_relation)
+        res = self.client().post('/'+version+'/partenr', json=self.new_relation, headers=headers1)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
         self.assertEqual(res.status_code, 200)
         self.assertIsNotNone(data['persons'])
+    def test_create_new_partenr_without_token(self):
+        '''
+        Test insert partenr with data in db
+        :pass
+        '''
+        # code for test POST methods  that send POST reaquset to /example
+        res = self.client().post('/'+version+'/partenr', json=self.new_relation)
+        # featch the post response
+        # data = json.loads(res.data)
+        # confirm the status response code is 200 is mean Ok
+        self.assertEqual(res.status_code, 401)
 
     def test_404_if_partenr_creation_no_data(self):
         '''
@@ -177,7 +217,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().post('/'+version+'/partenr', json=self.new_relation_empty)
+        res = self.client().post('/'+version+'/partenr', json=self.new_relation_empty, headers=headers1)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 422 is mean unprocessable
@@ -185,6 +225,84 @@ class familyTreeTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
 
+    def test_sucsse_update_person(self):
+        '''
+        Test update partenr with data in db
+        :pass
+        '''
+        # code for test POST methods  that send POST reaquset to /example
+        res = self.client().patch('/'+version+'/person/1', json=self.new_person2, headers=headers1)
+        # featch the post response
+        data = json.loads(res.data)
+        # confirm the status response code is 200 is mean Ok
+        self.assertEqual(res.status_code, 200)
+        self.assertIsNotNone(data['persons'])
+
+    def test_sucsse_update_person_without_token(self):
+        '''
+        Test update partenr with data in db
+        :pass
+        '''
+        # code for test POST methods  that send POST reaquset to /example
+        res = self.client().patch('/'+version+'/person/1', json=self.new_person2)
+        # featch the post response
+        # data = json.loads(res.data)
+        # confirm the status response code is 200 is mean Ok
+        self.assertEqual(res.status_code, 401)
+
+    def test_unsucsse_update_person(self):
+        '''
+        Test update partenr with data in db 
+        :pass
+        '''
+        # code for test POST methods  that send POST reaquset to /example
+        res = self.client().patch('/'+version+'/person/1', json=self.new_person_empty, headers=headers1)
+        # featch the post response
+        data = json.loads(res.data)
+        # confirm the status response code is 200 is mean Ok
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "unprocessable")
+
+    def test_sucsse_update_partenr(self):
+        '''
+        Test update partenr with data in db
+        :pass
+        '''
+        # code for test POST methods  that send POST reaquset to /example
+        res = self.client().patch('/'+version+'/partenr/1', headers=headers1 , json=self.new_relation)
+        # featch the post response
+        data = json.loads(res.data)
+        # confirm the status response code is 200 is mean Ok
+        self.assertEqual(res.status_code, 200)
+        self.assertIsNotNone(data['persons'])
+    def test_sucsse_update_partenr_without_token(self):
+        '''
+        Test update partenr with data in db
+        :pass
+        '''
+        # code for test POST methods  that send POST reaquset to /example
+        res = self.client().patch('/'+version+'/partenr/1', json=self.new_relation)
+        # featch the post response
+        # data = json.loads(res.data)
+        # confirm the status response code is 401 is mean Ok
+        self.assertEqual(res.status_code, 401)
+
+
+    def test_unsucsse_update_partenr(self):
+        '''
+        Test update partenr with data in db 
+        :pass
+        '''
+        # code for test POST methods  that send POST reaquset to /example
+        res = self.client().patch('/'+version+'/partenr/1', json=self.new_relation_empty, headers=headers1)
+        # featch the post response
+        data = json.loads(res.data)
+        # confirm the status response code is 200 is mean Ok
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "unprocessable")
+    
     def test_sucsse_delete_person(self):
         '''
         Test the delete the person exit in db
@@ -194,12 +312,26 @@ class familyTreeTestCase(unittest.TestCase):
         code for test DELETE methods  that send DELETE
         reaquset to /example/<int:id>
         '''
-        res = self.client().delete('/'+version+'/person/7')
+        res = self.client().delete('/'+version+'/person/9', headers=headers1)
         # featch the delete response
         data = json.loads(res.data)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['message'])
         self.assertTrue(data['delete_id'])
+
+    def test_delete_person_without_token(self):
+        '''
+        Test the delete the person exit in db
+        :pass
+        '''
+        '''
+        code for test DELETE methods  that send DELETE
+        reaquset to /example/<int:id>
+        '''
+        res = self.client().delete('/'+version+'/person/9')
+        # featch the delete response
+        # data = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
 
     def test_delete_person_not_exit(self):
         '''
@@ -211,7 +343,7 @@ class familyTreeTestCase(unittest.TestCase):
         code for test DELETE methods  that send DELETE
         reaquset to /example/<int:id>
         '''
-        res = self.client().delete('/'+version+'/person/62334')
+        res = self.client().delete('/'+version+'/person/62334', headers=headers1)
         # featch the delete response
         data = json.loads(res.data)
         # confirm the status response code is 422 is mean unprocessable
@@ -227,7 +359,7 @@ class familyTreeTestCase(unittest.TestCase):
         code for test DELETE methods  that send DELETE
         reaquset to /example/<int:id>
         '''
-        res = self.client().delete('/'+version+'/partenr/5')
+        res = self.client().delete('/'+version+'/partenr/6', headers=headers1)
         # featch the delete response
         data = json.loads(res.data)
         self.assertEqual(data['success'], True)
@@ -244,66 +376,28 @@ class familyTreeTestCase(unittest.TestCase):
         code for test DELETE methods  that send DELETE
         reaquset to /example/<int:id>
         '''
-        res = self.client().delete('/'+version+'/partenr/62334')
+        res = self.client().delete('/'+version+'/partenr/62334', headers=headers1)
         # featch the delete response
         data = json.loads(res.data)
         # confirm the status response code is 422 is mean unprocessable
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "resource not found")
-    def test_sucsse_update_person(self):
+    def test_delete_partenr_without_token(self):
         '''
-        Test update partenr with data in db
+        Test the delete the partenr not exit in db
+        becesed cannot delete record not exit in db
         :pass
         '''
-        # code for test POST methods  that send POST reaquset to /example
-        res = self.client().patch('/'+version+'/person/1', json=self.new_person2)
-        # featch the post response
-        data = json.loads(res.data)
-        # confirm the status response code is 200 is mean Ok
-        self.assertEqual(res.status_code, 200)
-        self.assertIsNotNone(data['persons'])
-
-    def test_unsucsse_update_person(self):
         '''
-        Test update partenr with data in db 
-        :pass
+        code for test DELETE methods  that send DELETE
+        reaquset to /example/<int:id>
         '''
-        # code for test POST methods  that send POST reaquset to /example
-        res = self.client().patch('/'+version+'/person/1', json=self.new_person_empty)
-        # featch the post response
-        data = json.loads(res.data)
-        # confirm the status response code is 200 is mean Ok
-        self.assertEqual(res.status_code, 422)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], "unprocessable")
-
-    def test_sucsse_update_person(self):
-        '''
-        Test update partenr with data in db
-        :pass
-        '''
-        # code for test POST methods  that send POST reaquset to /example
-        res = self.client().patch('/'+version+'/partenr/1', json=self.new_relation)
-        # featch the post response
-        data = json.loads(res.data)
-        # confirm the status response code is 200 is mean Ok
-        self.assertEqual(res.status_code, 200)
-        self.assertIsNotNone(data['persons'])
-
-    def test_unsucsse_update_partenr(self):
-        '''
-        Test update partenr with data in db 
-        :pass
-        '''
-        # code for test POST methods  that send POST reaquset to /example
-        res = self.client().patch('/'+version+'/partenr/1', json=self.new_relation_empty)
-        # featch the post response
-        data = json.loads(res.data)
-        # confirm the status response code is 200 is mean Ok
-        self.assertEqual(res.status_code, 422)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], "unprocessable")
+        res = self.client().delete('/'+version+'/partenr/62334')
+        # featch the delete response
+        # data = json.loads(res.data)
+        # confirm the status response code is 422 is mean unprocessable
+        self.assertEqual(res.status_code, 401)
 
 if __name__ == '__main__':
     unittest.main()
