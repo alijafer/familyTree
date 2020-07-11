@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 import json
 import os
-#from flask_migrate import Migrate
+# from flask_migrate import Migrate
 
 
 # database_path = os.environ['DATABASE_URL']
@@ -22,7 +22,7 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    #migrate = Migrate(app, db)
+    # migrate = Migrate(app, db)
     db.create_all()
 
 
@@ -44,6 +44,7 @@ class Person(db.Model):
     address = Column(String)
     nickname = Column(String)
     status= Column(String)
+
     def __init__(self, name, gender, day_of_birth, day_of_death, notes, address,
     nickname, status):
         self.name = name
@@ -67,6 +68,10 @@ class Person(db.Model):
             'person_id': self.person_id,
             'name': self.name
         }
+    def shortName(self):
+        return{
+        'name': self.name
+        } 
     def format(self):
         return {
             'person_id': self.person_id,
