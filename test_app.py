@@ -9,7 +9,7 @@ from auth import AuthError, requires_auth
 
 
 version  : Final = "v1"
-token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik5aWnZlbTNiMDVxR2hra0t1MUJldiJ9.eyJpc3MiOiJodHRwczovL2FsaWRldi5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWViZmEyMmI4YjIzOWQwYmZlNmRlMGY4IiwiYXVkIjoiZmFtaWx5VHJlZUFwaSIsImlhdCI6MTU5NDI1OTQ2OCwiZXhwIjoxNTk0MjY2NjY4LCJhenAiOiJrTUNyVHJpUDNzYnhINXZQaWR4eUhQQmxIbFFOZUMyQyIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOnBhcnRlbnIiLCJkZWxldGU6cGVyc29uIiwiZ2V0OnBhcnRlbnIiLCJnZXQ6cGVyc29uIiwicGF0Y2g6cGFydGVuciIsInBhdGNoOnBlcnNvbiIsInBvc3Q6cGFydGVuciIsInBvc3Q6cGVyc29uIl19.UfIpT10zjylu4UPbkrnDruYY5tNImAI_k8e7_Th4qkqAxyYN2HW0zqaV-yBU6BYc1hAqBpSPVK8PhdnMIqdmY5S0CWmyZXIDFtMC95QVOTRNtTL7GoEpy2FB6Rn8QHvnI5GyZkjBl3qcmmI5AcIhiklgEsHby1vJqwW9SKS68y6CnYLXfJrlRzoxA484DYZ0KIWjgUyjEmbqRf48VMvORjyiwMqfkhyCnvgCwpY_HYYHZfRI1uo2IP3uqOe5LwJ21jBr1dfJqi0WolFYetEjlcFmDZBEPCt5_0MkZZU80l__okeiUN2xKBG-s1CtNzjhLe56WhBYt2WO4caJkX5AKw"
+token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik5aWnZlbTNiMDVxR2hra0t1MUJldiJ9.eyJpc3MiOiJodHRwczovL2FsaWRldi5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWViZmEyMmI4YjIzOWQwYmZlNmRlMGY4IiwiYXVkIjoiZmFtaWx5VHJlZUFwaSIsImlhdCI6MTU5NDUzNTcwMSwiZXhwIjoxNTk0NTQyOTAxLCJhenAiOiJrTUNyVHJpUDNzYnhINXZQaWR4eUhQQmxIbFFOZUMyQyIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOnBhcnRlbnIiLCJkZWxldGU6cGVyc29uIiwiZ2V0OnBhcnRlbnIiLCJnZXQ6cGVyc29uIiwicGF0Y2g6cGFydGVuciIsInBhdGNoOnBlcnNvbiIsInBvc3Q6cGFydGVuciIsInBvc3Q6cGVyc29uIl19.lmhf-5c3Qoy0HvaaIcHEVkJoOBf8g3MZaGvXYuZVrDkJCfbT6PYIlBp824y85s_p5arGLGpBKOA3EGzksy0aatOMsbo7l3-u-HfMtf4s53x31WIx4sLFPMw5uvI9FvQ7qn2I6nKuH7j1P4YoiWmnNejsySShcOma3rYnr3vTHm8juNCWAXkwmg1ZlgQxYAXKTob2QMJSOUeDXFBKnBZbDlmtlMrGOz_7HbFXWB_F2P8zlXnWvGdhyqRVmny2hTRXRLCVJVkqZ1ClLS46pfmiLDf14k2ui93XURCakRk85EMgYZiAaKmHQMdMbsU8ObM1vEHxttsr8mEE0b8Af1l86w"
 headers1 = {'Content-Type': 'application/json', 'Authorization': 'Bearer '+ token}
 class familyTreeTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
@@ -71,14 +71,12 @@ class familyTreeTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-        #self.token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik5aWnZlbTNiMDVxR2hra0t1MUJldiJ9.eyJpc3MiOiJodHRwczovL2FsaWRldi5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWViZmEyMmI4YjIzOWQwYmZlNmRlMGY4IiwiYXVkIjoiZmFtaWx5VHJlZUFwaSIsImlhdCI6MTU5NDI1MTQzNywiZXhwIjoxNTk0MjU4NjM3LCJhenAiOiJrTUNyVHJpUDNzYnhINXZQaWR4eUhQQmxIbFFOZUMyQyIsInNjb3BlIjoiIn0.CIEmDgl_ZCwfxhsorYDtPjjI8TAAjb14nL-M19Ykao0e-mIYFf7jEoxam9XjzWLBFHEvIpMRldUDOm8si69leB0B1WstbK37WJHzDg5gzEZkSzZC81S313fyPG-ey82SoK7qRj5iZ9rFTQzD0gcXX6hEwOVldKihnV3HpVFGiQ_EdMr2ZTZu9xDQ7zF0D3gHZBmXSZnBp9sTPRSy6xarbp8pAFEqDVgOKZKboqyJaHijYXevtBCOcyftrJUQpbHVy10TPfvgSYIYHykBmTYKV5wNLrgV6QFJjUPuiNeGEB_omLxh98g2kMSIY0kTg4L1kVx59R7Jzz4lr2wHrAHXWw"
         
     def tearDown(self):
         """Executed after reach test"""
         pass
     
     def test_get_all_person(self):
-        
         '''
         Test to get all person
         return 'success': True, "persons": "persons"
@@ -98,7 +96,6 @@ class familyTreeTestCase(unittest.TestCase):
         self.assertEqual(len(data['persons']), 3)
 
     def test_get_all_person_without_token(self):
-        
         '''
         Test to get all person without token
         return 'success': False, 
@@ -198,7 +195,7 @@ class familyTreeTestCase(unittest.TestCase):
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
         self.assertEqual(res.status_code, 200)
-        self.assertIsNotNone(data['persons'])
+        self.assertIsNotNone(data['person'])
     def test_create_new_partenr_without_token(self):
         '''
         Test insert partenr with data in db
@@ -398,6 +395,36 @@ class familyTreeTestCase(unittest.TestCase):
         # data = json.loads(res.data)
         # confirm the status response code is 422 is mean unprocessable
         self.assertEqual(res.status_code, 401)
+    def test_persons_get_partenr(self):  
+        '''
+        Test to get all person
+        return 'success': True, "persons": "persons"
+        :pass
+        '''
+        # code for test GET methods  that send Get reaquset to /example
+        res = self.client().get("/"+version+"/partenr/2")
+        # featch the GET response
+        data = json.loads(res.data)
+        # confirm the status response code is 200 is mean Ok
+        self.assertEqual(res.status_code, 200)
+        # confirm the respones pass success is true
+        self.assertEqual(data['success'], True)
+        # confirm the respones pass the persons
+        self.assertTrue(data['data'])
+    def test_error_persons_get_partenr(self):  
+        '''
+        Test to get all person
+        return 'success': True, "persons": "persons"
+        :pass
+        '''
+        # code for test GET methods  that send Get reaquset to /example
+        res = self.client().get("/"+version+"/partenr/1")
+        # featch the GET response
+        data = json.loads(res.data)
+        # confirm the status response code is 422 is mean Ok
+        self.assertEqual(res.status_code, 422)
+
+
 
 if __name__ == '__main__':
     unittest.main()
