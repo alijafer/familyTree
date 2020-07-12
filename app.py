@@ -27,7 +27,7 @@ def create_app():
     # version of api
     VERSION: Final = "v1"
 
-    @app.route("/"+VERSION+"/", methods=['GET'])
+    @app.route("/"+VERSION+"/saimple", methods=['GET'])
     def persons_get_short_five():
         '''
         Displaying five names of persons
@@ -185,7 +185,7 @@ def create_app():
         })
 
     @app.route("/"+VERSION+"/partenr/<int:id_partenr>", methods=['GET'])
-    # @requires_auth('get:partenr')
+    @requires_auth('get:partenr')
     def persons_get_partenr(id_partenr):
         '''
         get tree family of id_partenr person
