@@ -5,7 +5,6 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, Person, Relations
-from typing import Final
 from utilies import paginate_person
 from auth import AuthError, requires_auth
 
@@ -21,11 +20,11 @@ def create_app():
     CORS(app)
     app.config['JSON_AS_ASCII'] = False
     # Relation const is final(fixed) for values for relationships
-    RELATION_CONST: Final = ["Father", "Mother", "wife", "husband", "child"]
+    RELATION_CONST = ["Father", "Mother", "wife", "husband", "child"]
     # PERSONS_PER_PAGE how many persons send per page
     PERSONS_PER_PAGE = 3
     # version of api
-    VERSION: Final = "v1"
+    VERSION = "v1"
 
     @app.route("/"+VERSION+"/saimple", methods=['GET'])
     def persons_get_short_five():
