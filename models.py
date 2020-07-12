@@ -6,10 +6,7 @@ import os
 # from flask_migrate import Migrate
 
 
-# database_path = os.environ['DATABASE_URL']
-database_name = "famliytree_test"
-database_path = "postgresql://{}:{}@{}/{}".format('postgres', '1',
-                'localhost:5432', database_name)
+database_path = os.environ['DATABASE_URL']
 db = SQLAlchemy()
 '''
 setup_db(app)
