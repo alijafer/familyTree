@@ -9,8 +9,12 @@ from auth import AuthError, requires_auth
 
 
 version  : Final = "v1"
-token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik5aWnZlbTNiMDVxR2hra0t1MUJldiJ9.eyJpc3MiOiJodHRwczovL2FsaWRldi5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWViZmEyMmI4YjIzOWQwYmZlNmRlMGY4IiwiYXVkIjoiZmFtaWx5VHJlZUFwaSIsImlhdCI6MTU5NDUzNTcwMSwiZXhwIjoxNTk0NTQyOTAxLCJhenAiOiJrTUNyVHJpUDNzYnhINXZQaWR4eUhQQmxIbFFOZUMyQyIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOnBhcnRlbnIiLCJkZWxldGU6cGVyc29uIiwiZ2V0OnBhcnRlbnIiLCJnZXQ6cGVyc29uIiwicGF0Y2g6cGFydGVuciIsInBhdGNoOnBlcnNvbiIsInBvc3Q6cGFydGVuciIsInBvc3Q6cGVyc29uIl19.lmhf-5c3Qoy0HvaaIcHEVkJoOBf8g3MZaGvXYuZVrDkJCfbT6PYIlBp824y85s_p5arGLGpBKOA3EGzksy0aatOMsbo7l3-u-HfMtf4s53x31WIx4sLFPMw5uvI9FvQ7qn2I6nKuH7j1P4YoiWmnNejsySShcOma3rYnr3vTHm8juNCWAXkwmg1ZlgQxYAXKTob2QMJSOUeDXFBKnBZbDlmtlMrGOz_7HbFXWB_F2P8zlXnWvGdhyqRVmny2hTRXRLCVJVkqZ1ClLS46pfmiLDf14k2ui93XURCakRk85EMgYZiAaKmHQMdMbsU8ObM1vEHxttsr8mEE0b8Af1l86w"
-headers1 = {'Content-Type': 'application/json', 'Authorization': 'Bearer '+ token}
+token_admin = os.environ.get('token-admin')
+token_admin_lite = os.environ.get('token-admin-lite')
+headers_admin = {'Content-Type': 'application/json',
+    'Authorization': 'Bearer '+ token_admin}
+headers_admin_lite = {'Content-Type': 'application/json',
+    'Authorization': 'Bearer '+ token_admin_lite}
 class familyTreeTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
     
@@ -25,6 +29,7 @@ class familyTreeTestCase(unittest.TestCase):
         self.database_path = "postgresql://{}:{}@{}/{}".format(
             self.username, self.password, 'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
+        
         self.new_person1 = {
             "address": "ahsaa",
             "day_of_birth": 1994,
@@ -83,7 +88,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test GET methods  that send Get reaquset to /example
-        res = self.client().get("/"+version+"/person", headers=headers1)
+        res = self.client().get("/"+version+"/person", headers=headers_admin)
         # featch the GET response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -116,7 +121,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test GET methods  that send Get reaquset to /example
-        res = self.client().get('/'+version+'/person', headers=headers1)
+        res = self.client().get('/'+version+'/person', headers=headers_admin)
         # featch the GET response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -134,7 +139,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test GET methods  that send Get reaquset to /example
-        res = self.client().get('/'+version+'/person?page=10000000', headers=headers1)
+        res = self.client().get('/'+version+'/person?page=10000000', headers=headers_admin)
         # featch the GET response
         data = json.loads(res.data)
         # confirm the status response code is 404 is mean resource not found
@@ -150,7 +155,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().post('/'+version+'/person', json=self.new_person1, headers=headers1)
+        res = self.client().post('/'+version+'/person', json=self.new_person1, headers=headers_admin)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -175,7 +180,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().post('/'+version+'/person', json=self.new_person_empty, headers=headers1)
+        res = self.client().post('/'+version+'/person', json=self.new_person_empty, headers=headers_admin)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 422 is mean unprocessable
@@ -190,7 +195,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().post('/'+version+'/partenr', json=self.new_relation, headers=headers1)
+        res = self.client().post('/'+version+'/partenr', json=self.new_relation, headers=headers_admin)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -214,7 +219,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().post('/'+version+'/partenr', json=self.new_relation_empty, headers=headers1)
+        res = self.client().post('/'+version+'/partenr', json=self.new_relation_empty, headers=headers_admin)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 422 is mean unprocessable
@@ -228,7 +233,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().patch('/'+version+'/person/1', json=self.new_person2, headers=headers1)
+        res = self.client().patch('/'+version+'/person/1', json=self.new_person2, headers=headers_admin)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -253,7 +258,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().patch('/'+version+'/person/1', json=self.new_person_empty, headers=headers1)
+        res = self.client().patch('/'+version+'/person/1', json=self.new_person_empty, headers=headers_admin)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -267,7 +272,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().patch('/'+version+'/partenr/1', headers=headers1 , json=self.new_relation)
+        res = self.client().patch('/'+version+'/partenr/1', headers=headers_admin , json=self.new_relation)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -292,7 +297,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test POST methods  that send POST reaquset to /example
-        res = self.client().patch('/'+version+'/partenr/1', json=self.new_relation_empty, headers=headers1)
+        res = self.client().patch('/'+version+'/partenr/1', json=self.new_relation_empty, headers=headers_admin)
         # featch the post response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -309,7 +314,7 @@ class familyTreeTestCase(unittest.TestCase):
         code for test DELETE methods  that send DELETE
         reaquset to /example/<int:id>
         '''
-        res = self.client().delete('/'+version+'/person/9', headers=headers1)
+        res = self.client().delete('/'+version+'/person/20', headers=headers_admin)
         # featch the delete response
         data = json.loads(res.data)
         self.assertEqual(data['success'], True)
@@ -325,7 +330,7 @@ class familyTreeTestCase(unittest.TestCase):
         code for test DELETE methods  that send DELETE
         reaquset to /example/<int:id>
         '''
-        res = self.client().delete('/'+version+'/person/9')
+        res = self.client().delete('/'+version+'/person/10')
         # featch the delete response
         # data = json.loads(res.data)
         self.assertEqual(res.status_code, 401)
@@ -340,7 +345,7 @@ class familyTreeTestCase(unittest.TestCase):
         code for test DELETE methods  that send DELETE
         reaquset to /example/<int:id>
         '''
-        res = self.client().delete('/'+version+'/person/62334', headers=headers1)
+        res = self.client().delete('/'+version+'/person/62334', headers=headers_admin)
         # featch the delete response
         data = json.loads(res.data)
         # confirm the status response code is 422 is mean unprocessable
@@ -356,7 +361,7 @@ class familyTreeTestCase(unittest.TestCase):
         code for test DELETE methods  that send DELETE
         reaquset to /example/<int:id>
         '''
-        res = self.client().delete('/'+version+'/partenr/6', headers=headers1)
+        res = self.client().delete('/'+version+'/partenr/10', headers=headers_admin)
         # featch the delete response
         data = json.loads(res.data)
         self.assertEqual(data['success'], True)
@@ -373,7 +378,7 @@ class familyTreeTestCase(unittest.TestCase):
         code for test DELETE methods  that send DELETE
         reaquset to /example/<int:id>
         '''
-        res = self.client().delete('/'+version+'/partenr/62334', headers=headers1)
+        res = self.client().delete('/'+version+'/partenr/62334', headers=headers_admin)
         # featch the delete response
         data = json.loads(res.data)
         # confirm the status response code is 422 is mean unprocessable
@@ -402,7 +407,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test GET methods  that send Get reaquset to /example
-        res = self.client().get("/"+version+"/partenr/2")
+        res = self.client().get("/"+version+"/partenr/2", headers=headers_admin)
         # featch the GET response
         data = json.loads(res.data)
         # confirm the status response code is 200 is mean Ok
@@ -418,7 +423,7 @@ class familyTreeTestCase(unittest.TestCase):
         :pass
         '''
         # code for test GET methods  that send Get reaquset to /example
-        res = self.client().get("/"+version+"/partenr/1")
+        res = self.client().get("/"+version+"/partenr/1", headers=headers_admin)
         # featch the GET response
         data = json.loads(res.data)
         # confirm the status response code is 422 is mean Ok
