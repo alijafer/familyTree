@@ -74,8 +74,33 @@ def create_app():
         except Exception:
             abort(404)
 
+    @app.route("/"+VERSION+"/relation", methods=['GET'])
+    @requires_auth('get:partenr')
+    def partenr_get_all(payload):
+        '''
+        send all relation information from databeass
+        privet /relation get methods
+        each page send 3 relation
+        scope requires authtction get:partenr
+        select * from relation
+        return 3 relation in each page, and 200 success
+        if any problem raise 404 like no data
+        '''
+        person_list = {}
+        try:
+            partenr_qurey = Relations.query.all()
+            current_partenr = paginate_person(request, partenr_qurey,
+                                              PERSONS_PER_PAGE)
+            if (len(current_partenr) == 0):
+                abort(404)
+            return jsonify({
+                "success": True,
+                "persons": current_partenr
+            })
+        except Exception:
+            abort(404)
     @app.route("/"+VERSION+"/person", methods=['POST'])
-    @requires_auth('get:person')
+    @requires_auth('post:person')
     def person_insert(payload):
         '''
         create and insert person
@@ -123,7 +148,7 @@ def create_app():
     @requires_auth('post:partenr')
     def make_partenr(payload):
         '''
-        create and insert partenr
+        create and make partenr
         make realtion between two person every person has partenr for example:
         Ali (person) has jafer (partenr), jafer is father (relation =1) of Ali
         privet /partenr post methods
@@ -185,9 +210,9 @@ def create_app():
 
     @app.route("/"+VERSION+"/partenr/<int:id_partenr>", methods=['GET'])
     @requires_auth('get:partenr')
-    def persons_get_partenr(id_partenr):
+    def persons_get_partenr(payload, id_partenr):
         '''
-        get tree family of id_partenr person
+        Fetches family of id_partenr person
         respons all person has id partern in partenr from Relation table
          that means will return father and mother of child
         int:person has int:partenr and int:relation
