@@ -99,6 +99,7 @@ def create_app():
             })
         except Exception:
             abort(404)
+
     @app.route("/"+VERSION+"/person", methods=['POST'])
     @requires_auth('post:person')
     def person_insert(payload):
@@ -566,6 +567,7 @@ def create_app():
         response.status_code = exception.status_code
         return response
     return app
+
 
 app = create_app()
 
