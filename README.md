@@ -233,7 +233,7 @@ respons all person has id partern in partenr from Relation table
 - Scope get:partenr
 - Request Arguments:
  ```json
- id: int [relation_id] 
+ id: int [partenr] 
 'Authorization': 'Bearer '+ token
 ```
 
