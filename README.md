@@ -76,6 +76,7 @@ createdb famliytree_test1 [<username>]
 psql famliytree_test1 [<username>] < test.psql
 export token-admin
 export token-admin-lite
+export DATABASE_URL
 python test_app.py
 ```
 # Postman 
