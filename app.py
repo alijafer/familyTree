@@ -95,7 +95,7 @@ def create_app():
                 abort(404)
             return jsonify({
                 "success": True,
-                "persons": current_partenr
+                "relation": current_partenr
             })
         except Exception:
             abort(404)
