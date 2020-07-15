@@ -1,5 +1,6 @@
-# Family Tree 
-## A project to create a family and display it in a simple way (JSON) using Python Flask 
+# Family Tree
+## Introduction
+A project to create a family and display it in a simple way (JSON) using Python Flask 
 - [heroku url](https://famliy-tree-api.herokuapp.com/v1/)
 
 This is backend using Flask web framework for Python
@@ -11,7 +12,8 @@ api can use to make:
 - fix data of Person and partner
 - remove partner
 - delete person
-
+## The purpose for create
+I have a big family (it's really big 😓)  my uncle took it upon himself to register the entire family. This idea came to me to solve documentation and coordination problems
 ## Getting Started for local use
 ### Installing Dependencies
 #### Python 3.8
@@ -33,7 +35,7 @@ This will install all of the required packages we selected within the `requireme
 
 - [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is required to handle requests and responses.
 
-- [SQLAlchemy](https://www.sqlalchemy.org/) and [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/) s the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in `./app.py` and can reference `./models.py`
+- [SQLAlchemy](https://www.sqlalchemy.org/) and [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/) s the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in [./app.py](./app.py) and can reference [./models.py](./models.py)
 
 - [jose](https://python-jose.readthedocs.io/en/latest/) JavaScript Object Signing and Encryption for JWTs. Useful for encoding, decoding, and verifying JWTS.
 
@@ -243,21 +245,64 @@ curl -L -X GET 'https://famliy-tree-api.herokuapp.com/v1/partenr/0' -H 'Authoriz
 ```
 - Respons:
 ```json 
-demo
 {
-    "persons": [
-        {
-            "address": "ahsaa",
-            "day_of_birth": 1930,
-            "day_of_death": 2018,
-            "gender": "m",
-            "name": "abdalah",
-            "nickname": "bo mohammad",
-            "notes": "test",
-            "person_id": 1,
-            "status": "death"
+    "data": {
+        "2": {
+            "partenr": {
+                "address": "ahsaa",
+                "day_of_birth": 1930,
+                "day_of_death": 2018,
+                "gender": "m",
+                "name": "abdalah",
+                "nickname": "bo mohammad",
+                "notes": "test",
+                "person_id": 1,
+                "status": "death"
+            },
+            "partenrid": 1,
+            "person": {
+                "address": "ahsaa",
+                "day_of_birth": 1994,
+                "day_of_death": null,
+                "gender": "m",
+                "name": "ali",
+                "nickname": "bo jafer",
+                "notes": "test",
+                "person_id": 2,
+                "status": "live"
+            },
+            "relation": 1
         }
-    ],
+    },
+    "id_partenr": 1,
+    "relations": {
+        "1,2": {
+            "2": {
+                "address": "ahsaa",
+                "day_of_birth": 1994,
+                "day_of_death": null,
+                "gender": "m",
+                "name": "ali",
+                "nickname": "bo jafer",
+                "notes": "test",
+                "person_id": 2,
+                "status": "live"
+            },
+            "partenr": {
+                "address": "ahsaa",
+                "day_of_birth": 1930,
+                "day_of_death": 2018,
+                "gender": "m",
+                "name": "abdalah",
+                "nickname": "bo mohammad",
+                "notes": "test",
+                "person_id": 1,
+                "status": "death"
+            },
+            "partenrid": 1,
+            "relation": 1
+        }
+    },
     "success": true
 }
 ```
@@ -513,4 +558,7 @@ HTTP response status codes currently returned are:
 - 500 : Internal Server Error
 - 401 : authorization_header_missing
 # Author
-Ali J. Alamer 
+Ali J. Alamer
+# Acknowledgements
+This is the end of trip 🐱‍🏍 in Full-Stack Developer Nanodegree Program 👨‍🎓
+I thanks Udacity 😇 to help me learn ✍ Flask. Also I thanks Misk for giving me this opportunity to enter this course 📚.
